@@ -5,19 +5,18 @@ var Blowup = {
   canvas_backend_: null,
   id_: 'blowup',
   retina_subfix_: '-retina',
+  x_: 0,
+  y_: 0,
 
-  setup: function() {
+  setup: function(x, y) {
     var image = document.getElementById(this.id_);
-    image.onload = function() {
-      Blowup.init();
-    }
     image.onmousedown = function(e) {
       var radius = Blowup.diameter_ / 2;
 
       var x = e.pageX;
       var y = e.pageY;
 
-      Repeater.do();
+      Repeater.do(x, y);
 
       var x_offset = x - this.x;
       var y_offset = y - this.y;
@@ -55,6 +54,21 @@ var Blowup = {
       c.fill();
 
       c.drawImage(Blowup.canvas_backend_, x_offset, y_offset, Blowup.diameter_, Blowup.diameter_, 0, 0, Blowup.diameter_, Blowup.diameter_);
+    }
+
+    if (x != null && y != null && x != undefined && y != undefined) {
+      this.x_ = x;
+      this.y_ = y;
+
+      // if not, Blowup will not be intialized completely
+      image.onload = function() {
+        Blowup.init();
+        Repeater.toggle(false);
+      }
+    } else {
+      image.onload = function() {
+        Blowup.init();
+      }
     }
   },
 
@@ -119,7 +133,13 @@ var Blowup = {
 
     image.onload = function() {
       context.drawImage(image, 0, 0, Blowup.canvas_backend_.width, Blowup.canvas_backend_.height);
+      Blowup.didDraw();
     };
     image.src = this.getRetinaImage();
   },
+
+  didDraw: function() {
+    var image = document.getElementById(this.id_);
+    image.onmousedown({'pageX': this.x_, 'pageY': this.y_});
+  }
 };
