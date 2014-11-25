@@ -5,8 +5,8 @@ var Blowup = {
   canvas_backend_: null,
   id_: 'blowup',
   retina_subfix_: '-retina',
-  x_: 0,
-  y_: 0,
+  x_: null,
+  y_: null,
 
   setup: function(x, y) {
     var image = document.getElementById(this.id_);
@@ -139,7 +139,9 @@ var Blowup = {
   },
 
   didDraw: function() {
-    var image = document.getElementById(this.id_);
-    image.onmousedown({'pageX': this.x_, 'pageY': this.y_});
+    if (this.x_ && this.y_) {
+      var image = document.getElementById(this.id_);
+      image.onmousedown({'pageX': this.x_, 'pageY': this.y_});
+    }
   }
 };
