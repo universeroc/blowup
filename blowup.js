@@ -16,6 +16,9 @@ var Blowup = {
 
       var x = e.pageX;
       var y = e.pageY;
+
+      Repeater.do();
+
       var x_offset = x - this.x;
       var y_offset = y - this.y;
 
